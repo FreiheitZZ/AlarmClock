@@ -1,5 +1,5 @@
-#include "sys.h"
-#include "usart.h"	
+#include ".\sys.h"
+#include ".\usart.h"	
 #include "string.h"
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.

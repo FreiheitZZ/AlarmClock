@@ -1,5 +1,5 @@
-#include "sram.h"	  
-#include "usart.h"	     
+#include ".\sram.h"	  
+#include "..\..\Common\usart.h"	     
 
 //使用NOR/SRAM的 Bank1.sector3,地址位HADDR[27,26]=10 
 //对IS61LV25616/IS62WV25616,地址线范围为A0~A17 

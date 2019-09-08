@@ -1,6 +1,6 @@
 #ifndef __SRAM_H
 #define __SRAM_H															    
-#include "sys.h" 
+#include "..\..\Common\sys.h" 
 											  
 void FSMC_SRAM_Init(void);
 void FSMC_SRAM_WriteBuffer(u8* pBuffer,u32 WriteAddr,u32 NumHalfwordToWrite);

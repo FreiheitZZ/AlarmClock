@@ -1,5 +1,5 @@
-#include "key.h"
-#include "delay.h" 
+#include ".\key.h"
+#include "..\..\Common\delay.h" 
 
 //按键初始化函数
 void KEY_Init(void)

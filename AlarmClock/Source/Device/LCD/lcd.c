@@ -1,8 +1,8 @@
-#include "lcd.h"
+#include ".\lcd.h"
 #include "stdlib.h"
-#include "font.h" 
-#include "usart.h"	 
-#include "delay.h"	 
+#include ".\font.h" 
+#include "..\..\Common\usart.h"	 
+#include "..\..\Common\delay.h"	 
 //////////////////////////////////////////////////////////////////////////////////	 
 //支持驱动IC型号包括:ILI9341/ILI9325/RM68042/RM68021/ILI9320/ILI9328/LGDP4531/LGDP4535/
 //                  SPFD5408/1505/B505/C505/NT35310/NT35510/SSD1963等		    

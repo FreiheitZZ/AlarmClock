@@ -71,9 +71,9 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-#include "sys.h"
-#include "usart.h"
-#include "timer.h"
+#include "..\..\..\..\Common\sys.h"
+#include "..\..\..\..\Common\usart.h"
+#include "..\..\..\..\Device\timer\timer.h"
 //针对不同的编译器调用不同的stdint.h文件
 #if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
     #include <stdint.h>

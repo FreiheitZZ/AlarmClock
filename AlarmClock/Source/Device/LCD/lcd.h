@@ -1,6 +1,6 @@
 #ifndef __LCD_H
 #define __LCD_H		
-#include "sys.h"	 
+#include "..\..\Common\sys.h"	 
 #include "stdlib.h" 
 //////////////////////////////////////////////////////////////////////////////////	 
 //支持驱动IC型号包括:ILI9341/ILI9325/RM68042/RM68021/ILI9320/ILI9328/LGDP4531/LGDP4535/

@@ -2,7 +2,7 @@
 #define __USART_H
 #include "stdio.h"	
 #include "stm32f4xx_conf.h"
-#include "sys.h" 
+#include ".\sys.h" 
 //////////////////////////////////////////////////////////////////////////////////	 
 //V1.3修改说明 
 //支持适应不同频率下的串口波特率设置.

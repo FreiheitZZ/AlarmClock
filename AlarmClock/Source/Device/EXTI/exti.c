@@ -1,6 +1,6 @@
-#include "exti.h"
-#include "delay.h" 
-#include "key.h"
+#include ".\exti.h"
+#include "..\..\Common\delay.h" 
+#include "..\KEY\key.h"
 #include "FreeRTOS.h"
 #include "task.h"
 

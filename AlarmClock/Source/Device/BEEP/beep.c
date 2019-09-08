@@ -1,4 +1,4 @@
-#include "beep.h" 
+#include ".\beep.h" 
 
 //初始化PF8为输出口		    
 //BEEP IO初始化

@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\User;..\Source\Platform\CPU\CORE;..\Source\Platform\LIB\FWLIB\inc;..\Source\Platform\RTOS\FreeRTOS\include;..\Source\Platform\RTOS\FreeRTOS\portable\RVDS\ARM_CM4F;..\Source\Device\LED;..\Source\Device\TIMER;..\Source\Device\LCD;..\Source\Device\KEY;..\Source\Device\BEEP;..\Source\Device\EXTI;..\Source\Common;..\Source\Platform\CPU\stm32f4xx</IncludePath>
+              <IncludePath>..\Source\Platform\CPU\CORE;..\Source\Platform\LIB\FWLIB\inc;..\Source\Platform\RTOS\FreeRTOS\include;..\Source\Platform\RTOS\FreeRTOS\portable\RVDS\ARM_CM4F;..\Source\Platform\CPU\stm32f4xx</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
