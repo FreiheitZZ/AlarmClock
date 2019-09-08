@@ -12,6 +12,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "limits.h"
+#include "..\Common\ringbuffer.h"
+#include "..\Driver\uart\uart.h"
 
 //ﾈﾎﾎﾅﾏﾈｼｶ
 #define START_TASK_PRIO			1
@@ -50,6 +52,10 @@ int lcd_discolor[14]={	WHITE, BLACK, BLUE,  BRED,
 						GRED,  GBLUE, RED,   MAGENTA,       	 
 						GREEN, CYAN,  YELLOW,BROWN, 			
 						BRRED, GRAY };
+static	unsigned char		s_aRxData[400];	/* 受信バッファ(リングバッファ)	*/
+
+extern unsigned char		s_EntryNo_usart1;
+extern unsigned char		s_EntryNo_usart2;
 
 int main(void)
 { 
@@ -61,7 +67,9 @@ int main(void)
 	EXTIX_Init();						//ｳｼｻｯﾍ箚ｿﾖﾐｶﾏ
 	LCD_Init();							//ｳｼｻｯLCD
 	my_mem_init(SRAMIN);            	//ｳｼｻｯﾄﾚｲｿﾄﾚｴ豕ﾘ
-	
+
+	s_EntryNo_usart1 = RB_reqEntry(&s_aRxData[0], sizeof(s_aRxData));
+		
     POINT_COLOR = RED;
 	LCD_ShowString(30,10,200,16,16,"ATK STM32F103/407");	
 	LCD_ShowString(30,30,200,16,16,"FreeRTOS Examp 18-4");
@@ -136,6 +144,10 @@ void eventsetbit_task(void *pvParameters)
 		{
 			i=0;
 			LED0=!LED0;
+			while(RB_getBufferStatus(s_EntryNo_usart1) != RB_STS_EMPTY)
+			{
+				UART_transmitData(1, "%c",RB_getRingBuffer(s_EntryNo_usart1));
+			}
 		}
         vTaskDelay(10); //ﾑﾓﾊｱ10ms｣ｬﾒｲｾﾍﾊﾇ10ｸｱﾖﾓｽﾚﾅﾄ
 	}

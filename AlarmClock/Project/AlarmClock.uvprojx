@@ -395,6 +395,51 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Common</GroupName>
+          <Files>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Common\delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Common\malloc.c</FilePath>
+            </File>
+            <File>
+              <FileName>sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Common\sys.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Common\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>RingBuffer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Common\RingBuffer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Driver</GroupName>
+          <Files>
+            <File>
+              <FileName>Uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Driver\Uart\Uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>UartSTM32F407.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Driver\Uart\Uart_STM32F407\UartSTM32F407.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Device</GroupName>
           <Files>
             <File>
@@ -431,31 +476,6 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Source\Device\TIMER\timer.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Common</GroupName>
-          <Files>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Source\Common\delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>malloc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Source\Common\malloc.c</FilePath>
-            </File>
-            <File>
-              <FileName>sys.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Source\Common\sys.c</FilePath>
-            </File>
-            <File>
-              <FileName>usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Source\Common\usart.c</FilePath>
             </File>
           </Files>
         </Group>
