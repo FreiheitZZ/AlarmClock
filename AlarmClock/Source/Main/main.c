@@ -15,8 +15,8 @@
 #include "..\Common\ringbuffer.h"
 #include "..\Driver\uart\uart.h"
 
-void start_task(void *pvParameters);
-TaskHandle_t StartTask_Handler;
+void TSK_Initial(void *pvParameters);
+TaskHandle_t InitialTask_Handler;
 
 TaskHandle_t EventSetBit_Handler;
 void eventsetbit_task(void *pvParameters);
@@ -37,7 +37,7 @@ struct taskDefine
 
 enum
 {
-	START_TASK_NUM,
+	INITIAL_TASK_NUM,
 	SETBIT_TASK_NUM,
 	GROUP_TASK_NUM,
 	TASK_NUM_MAX,
@@ -45,7 +45,7 @@ enum
 
 const struct taskDefine taskCfg[TASK_NUM_MAX] = 
 {
-	{start_task,		"start_task",		256,	NULL,	1,	&StartTask_Handler},
+	{TSK_Initial,		"start_task",		256,	NULL,	1,	&InitialTask_Handler},
 	{eventsetbit_task,	"eventsetbit_task",	256,	NULL,	2,	&EventSetBit_Handler},
 	{eventgroup_task,	"eventgroup_task",	256,	NULL,	3,	&EventGroupTask_Handler},
 
@@ -71,6 +71,22 @@ int main(void)
 { 
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);//设置系统中断优先级分组4
 	delay_init(168);					//初始化延时函数
+	
+	//创建开始任务
+    xTaskCreate((TaskFunction_t )taskCfg[INITIAL_TASK_NUM].func,
+                (const char*    )taskCfg[INITIAL_TASK_NUM].name,
+                (uint16_t       )taskCfg[INITIAL_TASK_NUM].size,
+                (void*          )taskCfg[INITIAL_TASK_NUM].para,
+                (UBaseType_t    )taskCfg[INITIAL_TASK_NUM].prio,
+                (TaskHandle_t*  )taskCfg[INITIAL_TASK_NUM].handler);
+    vTaskStartScheduler();          //开启任务调度
+}
+
+//开始任务任务函数
+void TSK_Initial(void *pvParameters)
+{
+    taskENTER_CRITICAL();           //进入临界区
+	
 	uart_init(115200);     				//初始化串口
 	LED_Init();		        			//初始化LED端口
 	KEY_Init();							//初始化按键
@@ -92,21 +108,6 @@ int main(void)
 	POINT_COLOR = BLUE;
 	LCD_ShowString(30,110,220,16,16,"Event Group Value:0");
 	
-	//创建开始任务
-    xTaskCreate((TaskFunction_t )taskCfg[START_TASK_NUM].func,
-                (const char*    )taskCfg[START_TASK_NUM].name,
-                (uint16_t       )taskCfg[START_TASK_NUM].size,
-                (void*          )taskCfg[START_TASK_NUM].para,
-                (UBaseType_t    )taskCfg[START_TASK_NUM].prio,
-                (TaskHandle_t*  )taskCfg[START_TASK_NUM].handler);
-    vTaskStartScheduler();          //开启任务调度
-}
-
-//开始任务任务函数
-void start_task(void *pvParameters)
-{
-    taskENTER_CRITICAL();           //进入临界区
-	
 	//创建设置事件位的任务
     xTaskCreate((TaskFunction_t )taskCfg[SETBIT_TASK_NUM].func,
                 (const char*    )taskCfg[SETBIT_TASK_NUM].name,
@@ -122,7 +123,7 @@ void start_task(void *pvParameters)
 				(UBaseType_t	)taskCfg[GROUP_TASK_NUM].prio,
 				(TaskHandle_t*	)taskCfg[GROUP_TASK_NUM].handler); 
 
-    vTaskDelete(StartTask_Handler); //删除开始任务
+    vTaskDelete(InitialTask_Handler); //删除开始任务
     taskEXIT_CRITICAL();            //退出临界区
 }
 

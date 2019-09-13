@@ -729,6 +729,46 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Module</GroupName>
+          <Files>
+            <File>
+              <FileName>Initial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Module\Initial\Initial.c</FilePath>
+            </File>
+            <File>
+              <FileName>StandByAcceptor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Module\StandBy\StandByAcceptor.c</FilePath>
+            </File>
+            <File>
+              <FileName>StandByChecker.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Module\StandBy\StandByChecker.c</FilePath>
+            </File>
+            <File>
+              <FileName>StandByExecutor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Module\StandBy\StandByExecutor.c</FilePath>
+            </File>
+            <File>
+              <FileName>StandBySequencer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Module\StandBy\StandBySequencer.c</FilePath>
+            </File>
+            <File>
+              <FileName>WatchDogTimerManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Module\WatchDogTimer\WatchDogTimerManager.c</FilePath>
+            </File>
+            <File>
+              <FileName>WatchDogTimerMN103LF15.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\Module\WatchDogTimer\forMN103LF15\WatchDogTimerMN103LF15.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>
