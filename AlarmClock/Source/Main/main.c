@@ -15,32 +15,42 @@
 #include "..\Common\ringbuffer.h"
 #include "..\Driver\uart\uart.h"
 
-//任务优先级
-#define START_TASK_PRIO			1
-//任务堆栈大小	
-#define START_STK_SIZE 			256  
-//任务句柄
-TaskHandle_t StartTask_Handler;
-//任务函数
 void start_task(void *pvParameters);
+TaskHandle_t StartTask_Handler;
 
-//任务优先级
-#define EVENTSETBIT_TASK_PRIO	2
-//任务堆栈大小	
-#define EVENTSETBIT_STK_SIZE 	256  
-//任务句柄
 TaskHandle_t EventSetBit_Handler;
-//任务函数
 void eventsetbit_task(void *pvParameters);
 
-//任务优先级
-#define EVENTGROUP_TASK_PRIO	3
-//任务堆栈大小	
-#define EVENTGROUP_STK_SIZE 	256  
-//任务句柄
 TaskHandle_t EventGroupTask_Handler;
-//任务函数
 void eventgroup_task(void *pvParameters);
+
+////////////////////////////////////////////////
+struct taskDefine
+{
+	TaskFunction_t	func;		//任务函数
+	const char*		name;		//任务名称
+	uint16_t		size;		//任务堆栈大小
+	void*			para;		//传递给任务函数的参数
+	UBaseType_t		prio;		//任务优先级
+	TaskHandle_t*	handler;	//任务句柄
+};
+
+enum
+{
+	START_TASK_NUM,
+	SETBIT_TASK_NUM,
+	GROUP_TASK_NUM,
+	TASK_NUM_MAX,
+};
+
+const struct taskDefine taskCfg[TASK_NUM_MAX] = 
+{
+	{start_task,		"start_task",		256,	NULL,	1,	&StartTask_Handler},
+	{eventsetbit_task,	"eventsetbit_task",	256,	NULL,	2,	&EventSetBit_Handler},
+	{eventgroup_task,	"eventgroup_task",	256,	NULL,	3,	&EventGroupTask_Handler},
+
+};
+
 
 ////////////////////////////////////////////////////////
 #define EVENTBIT_0	(1<<0)				//事件位
@@ -83,12 +93,12 @@ int main(void)
 	LCD_ShowString(30,110,220,16,16,"Event Group Value:0");
 	
 	//创建开始任务
-    xTaskCreate((TaskFunction_t )start_task,            //任务函数
-                (const char*    )"start_task",          //任务名称
-                (uint16_t       )START_STK_SIZE,        //任务堆栈大小
-                (void*          )NULL,                  //传递给任务函数的参数
-                (UBaseType_t    )START_TASK_PRIO,       //任务优先级
-                (TaskHandle_t*  )&StartTask_Handler);   //任务句柄              
+    xTaskCreate((TaskFunction_t )taskCfg[START_TASK_NUM].func,
+                (const char*    )taskCfg[START_TASK_NUM].name,
+                (uint16_t       )taskCfg[START_TASK_NUM].size,
+                (void*          )taskCfg[START_TASK_NUM].para,
+                (UBaseType_t    )taskCfg[START_TASK_NUM].prio,
+                (TaskHandle_t*  )taskCfg[START_TASK_NUM].handler);
     vTaskStartScheduler();          //开启任务调度
 }
 
@@ -98,19 +108,20 @@ void start_task(void *pvParameters)
     taskENTER_CRITICAL();           //进入临界区
 	
 	//创建设置事件位的任务
-    xTaskCreate((TaskFunction_t )eventsetbit_task,             
-                (const char*    )"eventsetbit_task",           
-                (uint16_t       )EVENTSETBIT_STK_SIZE,        
-                (void*          )NULL,                  
-                (UBaseType_t    )EVENTSETBIT_TASK_PRIO,        
-                (TaskHandle_t*  )&EventSetBit_Handler);   	
+    xTaskCreate((TaskFunction_t )taskCfg[SETBIT_TASK_NUM].func,
+                (const char*    )taskCfg[SETBIT_TASK_NUM].name,
+                (uint16_t       )taskCfg[SETBIT_TASK_NUM].size,
+                (void*          )taskCfg[SETBIT_TASK_NUM].para,
+                (UBaseType_t    )taskCfg[SETBIT_TASK_NUM].prio,
+                (TaskHandle_t*  )taskCfg[SETBIT_TASK_NUM].handler);	
     //创建事件标志组处理任务
-    xTaskCreate((TaskFunction_t )eventgroup_task,             
-                (const char*    )"eventgroup_task",           
-                (uint16_t       )EVENTGROUP_STK_SIZE,        
-                (void*          )NULL,                  
-                (UBaseType_t    )EVENTGROUP_TASK_PRIO,        
-                (TaskHandle_t*  )&EventGroupTask_Handler);     
+	xTaskCreate((TaskFunction_t )taskCfg[GROUP_TASK_NUM].func,
+				(const char*	)taskCfg[GROUP_TASK_NUM].name,
+				(uint16_t		)taskCfg[GROUP_TASK_NUM].size,
+				(void*			)taskCfg[GROUP_TASK_NUM].para,
+				(UBaseType_t	)taskCfg[GROUP_TASK_NUM].prio,
+				(TaskHandle_t*	)taskCfg[GROUP_TASK_NUM].handler); 
+
     vTaskDelete(StartTask_Handler); //删除开始任务
     taskEXIT_CRITICAL();            //退出临界区
 }
