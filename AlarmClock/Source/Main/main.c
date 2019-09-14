@@ -14,43 +14,7 @@
 #include "limits.h"
 #include "..\Common\ringbuffer.h"
 #include "..\Driver\uart\uart.h"
-
-void TSK_Initial(void *pvParameters);
-TaskHandle_t InitialTask_Handler;
-
-TaskHandle_t EventSetBit_Handler;
-void eventsetbit_task(void *pvParameters);
-
-TaskHandle_t EventGroupTask_Handler;
-void eventgroup_task(void *pvParameters);
-
-////////////////////////////////////////////////
-struct taskDefine
-{
-	TaskFunction_t	func;		//任务函数
-	const char*		name;		//任务名称
-	uint16_t		size;		//任务堆栈大小
-	void*			para;		//传递给任务函数的参数
-	UBaseType_t		prio;		//任务优先级
-	TaskHandle_t*	handler;	//任务句柄
-};
-
-enum
-{
-	INITIAL_TASK_NUM,
-	SETBIT_TASK_NUM,
-	GROUP_TASK_NUM,
-	TASK_NUM_MAX,
-};
-
-const struct taskDefine taskCfg[TASK_NUM_MAX] = 
-{
-	{TSK_Initial,		"start_task",		256,	NULL,	1,	&InitialTask_Handler},
-	{eventsetbit_task,	"eventsetbit_task",	256,	NULL,	2,	&EventSetBit_Handler},
-	{eventgroup_task,	"eventgroup_task",	256,	NULL,	3,	&EventGroupTask_Handler},
-
-};
-
+//#include "..\Platform\RTOS\TaskConfig.h"
 
 ////////////////////////////////////////////////////////
 #define EVENTBIT_0	(1<<0)				//事件位
@@ -62,69 +26,22 @@ int lcd_discolor[14]={	WHITE, BLACK, BLUE,  BRED,
 						GRED,  GBLUE, RED,   MAGENTA,       	 
 						GREEN, CYAN,  YELLOW,BROWN, 			
 						BRRED, GRAY };
-static	unsigned char		s_aRxData[400];	/* 庴怣僶僢僼傽(儕儞僌僶僢僼傽)	*/
 
 extern unsigned char		s_EntryNo_usart1;
 extern unsigned char		s_EntryNo_usart2;
+
+extern TaskHandle_t EventGroupTask_Handler;
+extern TaskHandle_t EventSetBit_Handler;
+
+extern	void	initialTask_Create(void);
 
 int main(void)
 { 
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);//设置系统中断优先级分组4
 	delay_init(168);					//初始化延时函数
 	
-	//创建开始任务
-    xTaskCreate((TaskFunction_t )taskCfg[INITIAL_TASK_NUM].func,
-                (const char*    )taskCfg[INITIAL_TASK_NUM].name,
-                (uint16_t       )taskCfg[INITIAL_TASK_NUM].size,
-                (void*          )taskCfg[INITIAL_TASK_NUM].para,
-                (UBaseType_t    )taskCfg[INITIAL_TASK_NUM].prio,
-                (TaskHandle_t*  )taskCfg[INITIAL_TASK_NUM].handler);
+	initialTask_Create();
     vTaskStartScheduler();          //开启任务调度
-}
-
-//开始任务任务函数
-void TSK_Initial(void *pvParameters)
-{
-    taskENTER_CRITICAL();           //进入临界区
-	
-	uart_init(115200);     				//初始化串口
-	LED_Init();		        			//初始化LED端口
-	KEY_Init();							//初始化按键
-	EXTIX_Init();						//初始化外部中断
-	LCD_Init();							//初始化LCD
-	my_mem_init(SRAMIN);            	//初始化内部内存池
-
-	s_EntryNo_usart1 = RB_reqEntry(&s_aRxData[0], sizeof(s_aRxData));
-		
-    POINT_COLOR = RED;
-	LCD_ShowString(30,10,200,16,16,"ATK STM32F103/407");	
-	LCD_ShowString(30,30,200,16,16,"FreeRTOS Examp 18-4");
-	LCD_ShowString(30,50,200,16,16,"Task Notify Event Group");
-	LCD_ShowString(30,70,200,16,16,"ATOM@ALIENTEK");
-	LCD_ShowString(30,90,200,16,16,"2016/11/25");
-
-	POINT_COLOR = BLACK;
-	LCD_DrawRectangle(5,130,234,314);	//画矩形
-	POINT_COLOR = BLUE;
-	LCD_ShowString(30,110,220,16,16,"Event Group Value:0");
-	
-	//创建设置事件位的任务
-    xTaskCreate((TaskFunction_t )taskCfg[SETBIT_TASK_NUM].func,
-                (const char*    )taskCfg[SETBIT_TASK_NUM].name,
-                (uint16_t       )taskCfg[SETBIT_TASK_NUM].size,
-                (void*          )taskCfg[SETBIT_TASK_NUM].para,
-                (UBaseType_t    )taskCfg[SETBIT_TASK_NUM].prio,
-                (TaskHandle_t*  )taskCfg[SETBIT_TASK_NUM].handler);	
-    //创建事件标志组处理任务
-	xTaskCreate((TaskFunction_t )taskCfg[GROUP_TASK_NUM].func,
-				(const char*	)taskCfg[GROUP_TASK_NUM].name,
-				(uint16_t		)taskCfg[GROUP_TASK_NUM].size,
-				(void*			)taskCfg[GROUP_TASK_NUM].para,
-				(UBaseType_t	)taskCfg[GROUP_TASK_NUM].prio,
-				(TaskHandle_t*	)taskCfg[GROUP_TASK_NUM].handler); 
-
-    vTaskDelete(InitialTask_Handler); //删除开始任务
-    taskEXIT_CRITICAL();            //退出临界区
 }
 
 

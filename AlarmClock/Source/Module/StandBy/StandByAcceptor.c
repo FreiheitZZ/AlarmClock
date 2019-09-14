@@ -1,12 +1,22 @@
 #include <string.h>				/* memcpy(),memset()etc */
+//#include "../../Platform/RTOS/TaskConfig.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
-void TSK_StandBy(void)
+extern TaskHandle_t StandbyTask_Handler;
+
+void TSK_StandBy(void *pvParameters)
 {
 	/*************************************************************
 		帺摦曄悢掕媊
 	*************************************************************/
 	unsigned char   standbyout_fac;
 	unsigned char  i,j,cnt;
+	
+	OS_createResources();
+
+	vTaskDelete(StandbyTask_Handler); //删除开始任务
+
 #if 0
 STANBY:
 
